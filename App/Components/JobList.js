@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { TextStyles } from '../Constants/Styles'
 import { Images } from '../Constants/Images'
@@ -9,7 +9,7 @@ import { useTheme } from '@react-navigation/native'
 import { FONTS } from '../Constants/Fonts'
 
 
-const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbottom }) => {
+const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbottom, deleteJob }) => {
   const { colors } = useTheme();
 
   // useEffect();
@@ -28,7 +28,7 @@ const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbo
           // scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           // onMomentumScrollEnd={()=>console.log('onMomentumScrollEnd...')}
-          renderItem={(!loading || count > 0)? ({ item, index }) => {
+          renderItem={(!loading || count > 0) ? ({ item, index }) => {
             return (
               <>
                 <Pressable style={{ flexDirection: 'row', gap: 10, flex: 6, marginBottom: 10, borderBottomWidth: 0.2, paddingBottom: 10, borderBottomColor: colors.lightBlck }}
@@ -55,27 +55,36 @@ const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbo
                         {item?.departments?.map((item, index) => { return (<Text style={{ fontSize: textSize(10) }}>{item?.name + (index <  (item?.departments?.length-1)? ',' : '')}</Text>) })}
                       </View>
                     </View>} */}
-                      {(item.locations?.length > 0 || item.states?.length > 0) && <View style={{ flexDirection: 'row', gap: 10, marginTop: 5 }}>
-                        <Image source={Images.locationDrawer} style={{ height: 15, width: 15, marginTop: 2, tintColor: colors.greyText, marginLeft: 2 }} />
-                        <View style={{ flexDirection: 'row', gap: 2 }}>
-                          {item?.locations?.map((itm, ind) => {
-                            return (
-                              <>
-                                {ind < 2 && <Text style={{ fontSize: textSize(10), color: colors.greyText, fontFamily: FONTS.medium }}>{itm.name + ','}</Text>}
-                              </>
-                            )
-                          })}
-                          {/* <Text>husdjlknl</Text> */}
-                          {item?.states?.map((itm, ind) => {
-                            return (
-                              <>
-                                {ind < 1 && <Text style={{ fontSize: textSize(10), color: colors.greyText }}>{itm.name}</Text>}
-                              </>
-                            )
-                          })}
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {(item.locations?.length > 0 || item.states?.length > 0) && <View style={{ flexDirection: 'row', gap: 10, marginTop: 5 }}>
+                          <Image source={Images.locationDrawer} style={{ height: 15, width: 15, marginTop: 2, tintColor: colors.greyText, marginLeft: 2 }} />
+                          <View style={{ flexDirection: 'row', gap: 2 }}>
+                            {item?.locations?.map((itm, ind) => {
+                              return (
+                                <>
+                                  {ind < 2 && <Text style={{ fontSize: textSize(10), color: colors.greyText, fontFamily: FONTS.medium }}>{itm.name + ','}</Text>}
+                                </>
+                              )
+                            })}
+                            {/* <Text>husdjlknl</Text> */}
+                            {item?.states?.map((itm, ind) => {
+                              return (
+                                <>
+                                  {ind < 1 && <Text style={{ fontSize: textSize(10), color: colors.greyText }}>{itm.name}</Text>}
+                                </>
+                              )
+                            })}
+                          </View>
+                        </View>}
+                        <View>
+                          {deleteJob && <TouchableOpacity
+                            // style={{ marginTop: 10, alignSelf: 'flex-end' }}
+                            onPress={() => deleteJob(item.id)}
+                          >
+                            <Image source={Images.delete} style={{ width: 18, height: 18, resizeMode: 'contain', tintColor: colors.text }} />
+                          </TouchableOpacity>}
                         </View>
-                      </View>}
-
+                      </View>
 
                     </View>
                   </View>
@@ -94,7 +103,7 @@ const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbo
                 </Pressable>
               </>
             )
-          }:null}
+          } : null}
           keyExtractor={(itm, index) => index.toString()}
           ListFooterComponent={() => {
             return (
@@ -105,8 +114,8 @@ const JobList = ({ title, backPage, jobList, loading, viewMore, count, paddingbo
           }}
         />}
       </View>
-      {loading && (count == 0 || !count)  && <ActivityIndicator size={28} style={{ marginTop: 150 }} />}
-      {jobList.length == 0 && !loading && <Text style={{ textAlign: 'center', marginTop: screenHeight / 3,color:colors.greyText }}>No Records Found !</Text>}
+      {loading && (count == 0 || !count) && <ActivityIndicator size={28} style={{ marginTop: 150 }} />}
+      {jobList.length == 0 && !loading && <Text style={{ textAlign: 'center', marginTop: screenHeight / 3, color: colors.greyText }}>No Records Found !</Text>}
     </View>
   )
 }

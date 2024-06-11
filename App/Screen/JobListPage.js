@@ -12,10 +12,12 @@ import UseApi from '../ApiConf'
 import { useTheme } from '@react-navigation/native'
 import { FONTS } from '../Constants/Fonts'
 import { useSelector } from 'react-redux'
+import Toast from 'react-native-simple-toast';
+
 
 
 const JobListPage = ({ route }) => {
-    const { type, title, id, typeField, bookmarkList,backPage } = route.params;
+    const { type, title, id, typeField, bookmarkList, backPage } = route.params;
     // const [currCategory, setCurrcategory] = useState(id ? id : '');
     const [jobTypes, setJobTypes] = useState([]);
     const [jobs, setJobs] = useState([]);
@@ -49,6 +51,25 @@ const JobListPage = ({ route }) => {
     //     }
     // }, [scrollCount]);
 
+    const deleteJob = async (jobid) => {
+        let params = {
+            user_email: userData?.email,
+            job_id: jobid
+        }
+
+        let data;
+        console.log('params...', params);
+        try {
+            data = await Request('user-bookmark', 'POST', params);
+        } catch (err) {
+            console.log('err...', err);
+        }
+        console.log('data...', data);
+        if (data?.status) {
+            getJobList(1, false, true);
+        }
+    }
+
 
     const getJobsByTypes = async () => {
         let data;
@@ -70,8 +91,10 @@ const JobListPage = ({ route }) => {
         // setLoading(false);
     }
 
-    const getJobList = async (currpage, viewMore) => {
-        setLoading(true);
+    const getJobList = async (currpage, viewMore, deletejob) => {
+        if (!deletejob) {
+            setLoading(true);
+        }
         let perpage = 20;
         let params = {
             type: bookmarkList ? '3' : '2',
@@ -102,8 +125,13 @@ const JobListPage = ({ route }) => {
             } else {
                 setJobs(data.job_list);
             }
+            if(deletejob){
+                Toast.show('Job deleted from saved list successfully.');
+            }
         }
-        setLoading(false);
+        if (!deletejob) {
+            setLoading(false);
+        }
     }
 
     const viewMoreJobs = async () => {
@@ -168,7 +196,7 @@ const JobListPage = ({ route }) => {
 
             <View style={appStyles.pageFrame}>
                 <BackHeader title={title ? title : null}
-                    onPress={() => backPage?NavigationService.navigate(backPage):NavigationService.navigate('Home')}
+                    onPress={() => backPage ? NavigationService.navigate(backPage) : NavigationService.navigate('Home')}
                 />
 
                 <View style={{ alignSelf: 'center', width: '97%', marginTop: 0, marginBottom: typeField ? 330 : 40 }}>
@@ -186,7 +214,14 @@ const JobListPage = ({ route }) => {
                             </Pressable>
                         </View>}
                     <View style={{ height: screenHeight, paddingBottom: 100, marginTop: 20 }}>
-                        <JobList jobList={jobs} loading={loading} viewMore={viewMoreJobs} count={scrollCount} backPage={backPage?backPage:null}/>
+                        <JobList
+                            jobList={jobs}
+                            loading={loading}
+                            viewMore={viewMoreJobs}
+                            count={scrollCount}
+                            backPage={backPage ? backPage : null}
+                            deleteJob={bookmarkList?deleteJob:null}
+                        />
                     </View>
                 </View>
                 {/* <JobList jobList={jobs} loading={loading} viewMore={viewMoreJobs} type={'Upcoming Jobs'} count={scrollCount} /> */}

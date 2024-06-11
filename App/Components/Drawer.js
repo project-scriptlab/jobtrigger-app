@@ -47,11 +47,11 @@ const openGmail = () => {
     let subject = 'Subject';
     let body = '';
     const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    Linking.openURL(url).catch(err=>console.log('An error occoured!'));
+
+    Linking.openURL(url).catch(err => console.log('An error occoured!'));
 }
 const topItems = [
-   
+
     {
         name: 'Job List', icon: Images.list, style: {},
         onPress: () => NavigationService.navigate('JobListPage', { type: '', title: 'Jobs List', id: null, typeField: null })
@@ -133,25 +133,45 @@ const otherMenuItems = [
 const DrawerContent = () => {
     // const [DarkMode, setDarkMode] = useState(darkMode);
     const { colors } = useTheme();
-    const [menusItems,setMenusItems] = useState(topItems);
+    const [menusItems, setMenusItems] = useState(topItems);
     const { appSetting, userData } = useSelector(state => state.User);
 
     // const dispatch = useDispatch()
 
     useEffect(() => {
-         if(userData){
-           setMenusItems([
+        //  if(userData){
+        //    setMenusItems([
+        //     {
+        //         name: 'My Saved Jobs', icon: Images.bookmark2, style: {},
+        //         onPress: () => NavigationService.navigate('JobListPage', { type: '', title: 'My Jobs', id: null, typeField: null, bookmarkList: true, backPage: 'Profile' })
+        //     },
+        //     ...topItems
+        //    ]);
+        //  }else{
+        //     setMenusItems(topItems);
+        //  }  
+        setMenusItems([
             {
                 name: 'My Saved Jobs', icon: Images.bookmark2, style: {},
-                onPress: () => NavigationService.navigate('JobListPage', { type: '', title: 'My Jobs', id: null, typeField: null, bookmarkList: true, backPage: 'Profile' })
+                onPress: () => {
+                    if (userData) {
+                        NavigationService.navigate('JobListPage', { type: '', title: 'My Jobs', id: null, typeField: null, bookmarkList: true, backPage: 'Profile' });
+                    } else {
+                        Alert.alert('', 'Do you want to Sign in to see saved jobs?', [
+                            {
+                                text: 'No',
+                                onPress: () => console.log('No Pressed'),
+                                style: 'No',
+                            },
+                            { text: 'Yes', onPress: NavigationService.navigate('Profile')},
+                        ]);
+                    }
+                }
             },
             ...topItems
-           ]);
-         }else{
-            setMenusItems(topItems);
-         }  
-       
-    }, [userData]);
+        ]);
+
+    }, []);
 
     // const logOut = async () => {
     //     dispatch(logout());

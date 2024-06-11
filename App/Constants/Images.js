@@ -28,6 +28,7 @@ export const Images ={
    email:require('../Assets/Icons/email.png'),
    bookmark:require('../Assets/Icons/bookmark.png'),
    bookmark2:require('../Assets/Icons/bookmark2.png'),
+   delete:require('../Assets/Icons/delete.png'),
    logout:require('../Assets/Icons/logout.png'),
    leftArrow:require('../Assets/Icons/leftArrow.png'),
    arrowNext:require('../Assets/Icons/arrowNext.png'),
