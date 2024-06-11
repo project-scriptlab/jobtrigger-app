@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "158028135878",
+    "project_id": "jobtrigger-57c1a",
+    "storage_bucket": "jobtrigger-57c1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158028135878:android:634eec53cb4c83c70946c7",
+        "android_client_info": {
+          "package_name": "com.jobtrigger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158028135878-8v4e9r3aadt41hctburm00tmrq08i03o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobtrigger",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "158028135878-hau312lih00epgvsar4ln3jm57al4ld9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWGqoiD32DstNRvQj2BJtArjHfBFL4b5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158028135878-hau312lih00epgvsar4ln3jm57al4ld9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
