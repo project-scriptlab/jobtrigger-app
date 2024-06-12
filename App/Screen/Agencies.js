@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Image, Linking, Modal, Pressable, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Linking, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { appStyles } from '../Constants/Styles'
 import { useTheme } from '@react-navigation/native';
@@ -48,14 +48,14 @@ const Agencies = () => {
         setLoading(true);
         let data;
         try {
-            data = await Request('important-links', 'POST', { state_id: currOptions.ids});
+            data = await Request('important-links', 'POST', { state_id: currOptions.ids });
         } catch (err) {
             console.log('err...', err);
         }
         // console.log('data...',data);
         if (data?.status) {
             console.log('data...', data);
-          setAgencies(data.important_links);
+            setAgencies(data.important_links);
         }
         setLoading(false);
     }
@@ -79,9 +79,11 @@ const Agencies = () => {
                 translucent={true}
                 backgroundColor="black"
             />
-            <View style={{ ...appStyles.pageFrame }}>
+            <View style={{ ...appStyles.pageFrame,paddingBottom:StatusBar.currentHeight+20 }}>
                 <BackHeader title={'Recruitment Agencies'} />
-                <View style={{ marginHorizontal: 5 }}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    style={{ marginHorizontal: 5 }}>
                     <View style={{ marginTop: 15 }}>
                         {/* <TextInput
                             placeholder='Search By States'
@@ -101,18 +103,10 @@ const Agencies = () => {
                                 style={{ height: 12, width: 12, tintColor: Colors.greyText }}
                             />
                         </Pressable>
-                        {/* <Pressable
-                            // onPress={searchJobs}
-                            style={{ position: 'absolute', top: 12, right: 10, }}>
-                            <Image
-                                source={Images.search}
-                                style={{ height: 20, width: 20, tintColor: colors.greyText }}
-                            />
-                        </Pressable> */}
                     </View>
-                    {loading  && <ActivityIndicator size={28} style={{ marginTop: screenHeight/3 }} />}
-                   {agnecies.length > 0 && !loading && <View style={{ borderColor: colors.greyText, borderWidth: 0.7, marginTop: 30 }}>
-                        <View style={{ flexDirection: 'row', gap: 2, backgroundColor: colors.blue }}>
+                    {loading && <ActivityIndicator size={28} style={{ marginTop: screenHeight / 3 }} />}
+                    {agnecies.length > 0 && !loading && <View style={{ borderColor: colors.greyText, borderWidth: 0.7, marginTop: 30 }}>
+                        <View style={{ flexDirection: 'row', gap: 2, backgroundColor: colors.darkBlue }}>
                             <View style={{ flex: 0.8, paddingVertical: 8, alignItems: 'center', justifyContent: 'center' }}>
                                 <Text style={{ fontFamily: FONTS.semibold, color: colors.text, textAlign: 'left', color: 'white' }}>SL.No</Text>
                             </View>
@@ -145,8 +139,8 @@ const Agencies = () => {
                         </View>
 
                     </View>}
-                </View>
-                {agnecies.length == 0 && !loading && <Text style={{ textAlign: 'center', marginTop: screenHeight / 3,color:colors.greyText }}>No Records Found !</Text>}
+                </ScrollView>
+                {agnecies.length == 0 && !loading && <Text style={{ textAlign: 'center', marginTop: screenHeight / 3, color: colors.greyText }}>No Records Found !</Text>}
 
             </View>
             <Modal

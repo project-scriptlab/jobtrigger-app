@@ -213,7 +213,7 @@ const JobListPage = ({ route }) => {
                                 />
                             </Pressable>
                         </View>}
-                    <View style={{ height: screenHeight, paddingBottom: 100, marginTop: 20 }}>
+                    <View style={{ height: screenHeight, paddingBottom: 100, marginTop: 8 }}>
                         <JobList
                             jobList={jobs}
                             loading={loading}

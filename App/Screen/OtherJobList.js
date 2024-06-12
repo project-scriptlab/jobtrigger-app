@@ -94,7 +94,7 @@ const OtherJobList = (props) => {
                     scrollEventThrottle={16}
                 > */}
                 <View style={{ alignSelf: 'center', width: '97%', marginTop: 0, marginBottom: 40 }}>
-                    <View style={{ marginTop: 15 }}>
+                   {(jobs?.length > 0) && <View style={{ marginTop: 15 }}>
                         <TextInput
                             placeholder='Search By Keyword'
                             placeholderTextColor={colors.greyText}
@@ -106,9 +106,9 @@ const OtherJobList = (props) => {
                             source={Images.search}
                             style={{ height: 20, width: 20, position: 'absolute', top: 12, right: 10, tintColor: colors.greyText }}
                         />
-                    </View>
+                    </View>}
                     <View style={{ marginTop: 35 }}>
-                        {(jobs?.length > 0 || !loading) && <FlatList
+                        {(jobs?.length > 0 && !loading) && <FlatList
                             data={jobs}
                             // onEndReached={viewMore?viewMore:()=>null}
                             // onEndReachedThreshold={0}
