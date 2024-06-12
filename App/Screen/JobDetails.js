@@ -17,18 +17,41 @@ import { useSelector } from 'react-redux'
 const JobDetails = ({ route }) => {
     // console.log('route?.params....', route?.params);
     const { slug, id, backPage, sectionId, jobList } = route?.params;
-    const [propData, setPropData] = useState({ id: id, backPage: backPage, sectionId: sectionId, jobList: jobList });
+    const [propData, setPropData] = useState({ id: id, backPage: backPage, sectionId: sectionId, jobList: jobList, slug: slug });
     const { Request } = UseApi();
     const [loading, setLoading] = useState(false);
     const [detailsList, setDetailsList] = useState([]);
     const [jobIds, setJobIds] = useState(slug ? [''] : [id]);
     const { colors } = useTheme();
-    const {userData} = useSelector(state=>state.User);
+    const { userData } = useSelector(state => state.User);
+    // const hasMounted = useRef(false);
 
 
     useEffect(() => {
         getJoList();
     }, [propData]);
+
+    // useEffect(() => {
+    //     if (hasMounted.current) {
+    //         // This code will only run when the dependency changes, not on initial render
+    //         // let { slug, id, backPage, sectionId, jobList } = route?.params;
+    //         setDetailsList([]);
+    //         setJobIds(route?.params?.slug ? [''] : [route?.params?.id]);
+    //         setPropData({
+    //             id: route?.params?.id,
+    //             backPage: route?.params?.backPage,
+    //             sectionId: route?.params?.sectionId,
+    //             jobList: route?.params?.jobList,
+    //             slug: route?.params?.slug
+    //         });
+
+    //     } else {
+    //         hasMounted.current = true;
+    //     }
+    //     console.log('route changes.....');
+
+    // }, [route]);
+
 
     const getJoList = () => {
         if (propData?.jobList?.length > 0) {
@@ -51,7 +74,7 @@ const JobDetails = ({ route }) => {
             setJobIds(pre => [...pre, ...list]);
             getJobDetails(false, arr, 0);
         } else {
-            getJobDetails(false, jobIds, 0, slug);
+            getJobDetails(false, jobIds, 0, propData.slug);
         }
     }
 
@@ -65,7 +88,7 @@ const JobDetails = ({ route }) => {
             // id: Id ? Id : id
             id: slug ? '' : arr[currInd],
             slug: slug ? slug : '',
-            user_id:userData?userData.id:''
+            user_id: userData ? userData.id : ''
         }
         let details;
         try {
@@ -75,15 +98,15 @@ const JobDetails = ({ route }) => {
         }
         if (details?.status && details.job_details?.length > 0) {
             console.log('details...', details);
-            let detail = { detail1: null, detail2: null, relatedJobs: [],bookmark:false };
+            let detail = { detail1: null, detail2: null, relatedJobs: [], bookmark: false };
             if (details.job_details[0]) {
                 detail.detail1 = details.job_details[0];
             }
             if (details.job_details[1]) {
                 detail.detail2 = details.job_details[1]?.in_detail;
             }
-            console.log('details.bookmark == 1....',details.bookmark == 1);
-            if(details.bookmark == 1){
+            console.log('details.bookmark == 1....', details.bookmark == 1);
+            if (details.bookmark == 1) {
                 detail.bookmark = true;
             }
             if (detail.detail1) {
@@ -140,7 +163,7 @@ const JobDetails = ({ route }) => {
                 backgroundColor="black"
             />
             <View style={{}}>
-                <View style={{...appStyles.pageFrame}}>
+                <View style={{ ...appStyles.pageFrame }}>
                     <BackHeader title={'Job Details'} onPress={() => propData.backPage ? NavigationService.navigate(`${propData.backPage}`, { id: propData.sectionId ? propData.sectionId : propData.id }) : NavigationService.navigate('Home')} />
                 </View>
                 {loading && <ActivityIndicator size={28} style={{ marginTop: 200 }} />}
@@ -165,11 +188,11 @@ const JobDetails = ({ route }) => {
                                 {detailsList[index] ? <JobDetailsCard
                                     details1={detailsList[index].detail1}
                                     details2={detailsList[index].detail2}
-                                    bookmark = {detailsList[index].bookmark}
+                                    bookmark={detailsList[index].bookmark}
                                     loading={loading}
                                     relatedJobs={detailsList[index]?.relatedJobs}
                                     id={item}
-                                    slug={slug}
+                                    slug={propData.slug}
                                     backPage={propData.backPage}
                                     jobList={jobList}
                                 // onPressRelatedJobs={onPressRelatedJobs}

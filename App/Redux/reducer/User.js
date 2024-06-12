@@ -6,7 +6,8 @@ export const UserSlice = createSlice({
     userData: null,
     login_status: false,
     darkMode:false,
-    appSetting:{darkMode:false,notification:true}
+    appSetting:{darkMode:false,notification:true},
+    currPageInd:0
   },
   reducers: {
     setuser(state, action) {
@@ -16,12 +17,15 @@ export const UserSlice = createSlice({
     setAppSetting(state, action) {
       state.appSetting = action.payload
     },
+    setCurrPageInd(state, action) {
+      state.currPageInd = action.payload
+    },
     logout(state, action) {
       state.userData = {}
       state.login_status = false;
     }
   }
 })
-export const { setuser, logout,setAppSetting } = UserSlice.actions;
+export const { setuser, logout,setAppSetting,setCurrPageInd } = UserSlice.actions;
 
 export default UserSlice.reducer;

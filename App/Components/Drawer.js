@@ -15,7 +15,8 @@ import { FONTS } from '../Constants/Fonts';
 import { Images } from '../Constants/Images';
 import { Colors } from '../Constants/Colors';
 import { useTheme } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrPageInd } from '../Redux/reducer/User';
 
 const shareLink = async () => {
     try {
@@ -130,26 +131,19 @@ const otherMenuItems = [
     // },
 ]
 
-const DrawerContent = () => {
+const DrawerContent = (props) => {
     // const [DarkMode, setDarkMode] = useState(darkMode);
     const { colors } = useTheme();
     const [menusItems, setMenusItems] = useState(topItems);
-    const { appSetting, userData } = useSelector(state => state.User);
+    const { appSetting, userData, } = useSelector(state => state.User);
+    const dispatch = useDispatch()
 
-    // const dispatch = useDispatch()
+ useEffect(()=>{
+      console.log('props.state..',props.state);
+      dispatch(setCurrPageInd(props.state.index));
+ },[props.state]);
 
     useEffect(() => {
-        //  if(userData){
-        //    setMenusItems([
-        //     {
-        //         name: 'My Saved Jobs', icon: Images.bookmark2, style: {},
-        //         onPress: () => NavigationService.navigate('JobListPage', { type: '', title: 'My Jobs', id: null, typeField: null, bookmarkList: true, backPage: 'Profile' })
-        //     },
-        //     ...topItems
-        //    ]);
-        //  }else{
-        //     setMenusItems(topItems);
-        //  }  
         setMenusItems([
             {
                 name: 'My Saved Jobs', icon: Images.bookmark2, style: {},
@@ -163,7 +157,7 @@ const DrawerContent = () => {
                                 onPress: () => console.log('No Pressed'),
                                 style: 'No',
                             },
-                            { text: 'Yes', onPress: NavigationService.navigate('Profile')},
+                            { text: 'Yes', onPress:()=>NavigationService.navigate('Profile')},
                         ]);
                     }
                 }
@@ -171,7 +165,7 @@ const DrawerContent = () => {
             ...topItems
         ]);
 
-    }, []);
+    }, [userData]);
 
     // const logOut = async () => {
     //     dispatch(logout());

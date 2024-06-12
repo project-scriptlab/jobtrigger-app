@@ -14,7 +14,7 @@ import { FONTS } from '../Constants/Fonts';
 // import NavigationService from '../Services/Navigation';
 
 const RelatedJobDetails = ({ route }) => {
-    const { jobId, id,slug, backPage } = route?.params;
+    const { currSlug,jobId, id,slug, backPage } = route?.params;
     const { width } = useWindowDimensions();
     const { shareLink, Request } = UseApi();
     const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const RelatedJobDetails = ({ route }) => {
         console.log('jobId real...', jobId);
         console.log('backPage real...', backPage);
         getJobDetails();
-        getRelatedJobs();
+        // getRelatedJobs();
     }, []);
 
     const getJobDetails = async () => {
@@ -38,7 +38,8 @@ const RelatedJobDetails = ({ route }) => {
         let params = {
             type: '1',
             // id: Id ? Id : id
-            id: `${jobId}`
+            id:jobId? `${jobId}`:'',
+            slug:currSlug || ''
         }
         let details;
         try {
@@ -54,14 +55,15 @@ const RelatedJobDetails = ({ route }) => {
             if (details.job_details[1]) {
                 setDetails2(details.job_details[1]?.in_detail);
             }
+            getRelatedJobs(details.job_details[0]?.id);
         }
         setLoading(false);
     }
 
-    const getRelatedJobs = async () => {
+    const getRelatedJobs = async (relatedId) => {
         let data;
         try {
-            data = await Request('related-jobs', 'POST', { job_id: jobId });
+            data = await Request('related-jobs', 'POST', { job_id: jobId || relatedId });
         } catch (err) {
             console.log('err...', err);
         }

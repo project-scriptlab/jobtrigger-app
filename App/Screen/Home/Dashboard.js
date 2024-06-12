@@ -31,7 +31,7 @@ const Dashboard = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [jobTypes, setJobTypes] = useState({ categories: [], states: [], qualifications: [] });
-    const [viewMoreInds, setViewMoreInds] = useState({ categoryInd: 11, statesInd: 11, qualificationInd: 11 });
+    const [viewMoreInds, setViewMoreInds] = useState({ latestNewInd: 5, lastDateInd: 5, categoryInd: 11, statesInd: 11, qualificationInd: 11 });
     // const [token, setToken] = useState(null);
     const [jobNews, setJobNews] = useState([]);
     const [jobNewsNew, setJobNewsNew] = useState([]);
@@ -39,7 +39,7 @@ const Dashboard = () => {
     const [upcomingJobs, setUpcomingJobs] = useState([]);
     const translateX = useSharedValue(0);
     const { colors } = useTheme();
-    const {userData} = useSelector(state=>state.User);
+    const { userData } = useSelector(state => state.User);
 
 
     useEffect(() => {
@@ -213,12 +213,12 @@ const Dashboard = () => {
                             style={{ paddingVertical: 5, marginRight: 5 }}
                         >
                             <Image
-                                source={userData?{uri:userData.image}: Images.user}
+                                source={userData ? { uri: userData.image } : Images.user}
                                 style={{
                                     height: 24,
                                     width: 24,
-                                    tintColor:userData?null:colors.text,
-                                    borderRadius:20
+                                    tintColor: userData ? null : colors.text,
+                                    borderRadius: 20
                                     // marginTop: 5
                                 }}
                             />
@@ -294,40 +294,42 @@ const Dashboard = () => {
                             <FlatList
                                 data={jobNewsNew}
                                 showsVerticalScrollIndicator={false}
-                                renderItem={({ item }) => {
+                                renderItem={({ item, index }) => {
                                     return (
-                                        <Pressable style={{ flexDirection: 'row', gap: 10, marginTop: 10, flex: 10 }}
-                                            onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...jobNewsNew, ...jobNews] })}
-                                        >
-                                            {/* {console.log('item.job_id...', item.job_id)} */}
-                                            <Image
-                                                source={Images.arrowNext}
-                                                style={{
-                                                    height: 15,
-                                                    width: 15,
-                                                    marginTop: 5,
-                                                    // flex: 0.5,
-                                                    tintColor: colors.greyText
-                                                }}
-                                            />
-                                            <Text style={{ fontSize: textSize(11), fontFamily: FONTS.semibold, color: colors.greyText, flex: 10 }}>{item?.title?.replace(/&nbsp;/g, ' ')}</Text>
-                                            <Animated.View style={animatedStyle}>
-                                                <View style={{ position: 'relative' }}>
-                                                    <Image
-                                                        source={Images.arrowNew}
-                                                        style={{
-                                                            height: 35,
-                                                            width: 40,
-                                                            marginRight: 10,
-                                                            // flex:0.9,
-                                                            tintColor: 'red',
-                                                            resizeMode: 'stretch'
-                                                        }}
-                                                    />
-                                                    <Text style={{ position: 'absolute', color: Colors.white, top: 8, left: 10, fontWeight: '500', fontSize: textSize(8) }}>New</Text>
-                                                </View>
-                                            </Animated.View>
-                                        </Pressable>
+                                        <>
+                                            {index <= viewMoreInds.latestNewInd && <Pressable style={{ flexDirection: 'row', gap: 10, marginTop: 10, flex: 10 }}
+                                                onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...jobNewsNew, ...jobNews] })}
+                                            >
+                                                {/* {console.log('item.job_id...', item.job_id)} */}
+                                                <Image
+                                                    source={Images.arrowNext}
+                                                    style={{
+                                                        height: 15,
+                                                        width: 15,
+                                                        marginTop: 5,
+                                                        // flex: 0.5,
+                                                        tintColor: colors.greyText
+                                                    }}
+                                                />
+                                                <Text style={{ fontSize: textSize(11), fontFamily: FONTS.semibold, color: colors.greyText, flex: 10 }}>{item?.title?.replace(/&nbsp;/g, ' ')}</Text>
+                                                <Animated.View style={animatedStyle}>
+                                                    <View style={{ position: 'relative' }}>
+                                                        <Image
+                                                            source={Images.arrowNew}
+                                                            style={{
+                                                                height: 35,
+                                                                width: 40,
+                                                                marginRight: 10,
+                                                                // flex:0.9,
+                                                                tintColor: 'red',
+                                                                resizeMode: 'stretch'
+                                                            }}
+                                                        />
+                                                        <Text style={{ position: 'absolute', color: Colors.white, top: 8, left: 10, fontWeight: '500', fontSize: textSize(8) }}>New</Text>
+                                                    </View>
+                                                </Animated.View>
+                                            </Pressable>}
+                                        </>
                                     )
                                 }}
                                 keyExtractor={(itm, index) => index.toString()}
@@ -335,12 +337,56 @@ const Dashboard = () => {
                             <FlatList
                                 data={jobNews}
                                 showsVerticalScrollIndicator={false}
-                                renderItem={({ item }) => {
+                                renderItem={({ item, index }) => {
                                     return (
-                                        <Pressable style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}
-                                            onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...jobNews, ...jobNewsNew] })}
+                                        <>
+                                            {(jobNewsNew.length + index) < viewMoreInds.latestNewInd && <Pressable style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}
+                                                onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...jobNews, ...jobNewsNew] })}
+                                            >
+                                                {console.log('item.job_id news...', item.job_id)}
+                                                <Image
+                                                    source={Images.arrowNext}
+                                                    style={{
+                                                        height: 15,
+                                                        width: 15,
+                                                        marginTop: 5,
+                                                        tintColor: colors.greyText
+                                                    }}
+                                                />
+                                                <Text style={{ fontSize: textSize(11), fontFamily: FONTS.semibold, color: colors.greyText, flex: 1 }}>{item?.title?.replace(/&nbsp;/g, ' ')}</Text>
+                                            </Pressable>}
+                                        </>
+                                    )
+                                }}
+                                keyExtractor={(itm, index) => index.toString()}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            style={{ alignSelf: 'center', marginTop: 10 }}
+                            onPress={() => {
+                                if (viewMoreInds.latestNewInd > 5) {
+                                    setViewMoreInds(pre => ({ ...pre, latestNewInd: 5 }));
+                                } else {
+                                    setViewMoreInds(pre => ({ ...pre, latestNewInd: jobNewsNew?.length + jobNews?.length - 1 }));
+                                }
+                            }}>
+                            {viewMoreInds.latestNewInd < 6 && ((jobNewsNew?.length + jobNews?.length) > 6) && <Text style={{ ...TextStyles.title3, textDecorationLine: 'underline', color: colors.text }}>
+                                View More</Text>}
+                            {viewMoreInds.latestNewInd > 5 && <Text style={{ ...TextStyles.title3, textDecorationLine: 'underline', color: colors.text }}>
+                                View Less</Text>}
+                        </TouchableOpacity>
+                    </View>}
+                    {jobType == 'Latest Jobs' && lastDatesApply.length > 0 && <View style={{ marginTop: 20 }}>
+                        <Text style={{ ...TextStyles.title2, marginBottom: 10, color: colors.text }}>Last Dates For Apply</Text>
+                        <FlatList
+                            data={lastDatesApply}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item,index }) => {
+                                return (
+                                    <>
+                                       {viewMoreInds.lastDateInd >= index && <Pressable style={{ flexDirection: 'row', gap: 10 }}
+                                            onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...lastDatesApply] })}
                                         >
-                                            {console.log('item.job_id news...', item.job_id)}
                                             <Image
                                                 source={Images.arrowNext}
                                                 style={{
@@ -350,49 +396,37 @@ const Dashboard = () => {
                                                     tintColor: colors.greyText
                                                 }}
                                             />
-                                            <Text style={{ fontSize: textSize(11), fontFamily: FONTS.semibold, color: colors.greyText, flex: 1 }}>{item?.title?.replace(/&nbsp;/g, ' ')}</Text>
-                                        </Pressable>
-                                    )
-                                }}
-                                keyExtractor={(itm, index) => index.toString()}
-                            />
-                        </View>
-                    </View>}
-                    {jobType == 'Latest Jobs' && lastDatesApply.length > 0 && <View style={{ marginTop: 20 }}>
-                        <Text style={{ ...TextStyles.title2, marginBottom: 10, color: colors.text }}>Last Dates For Apply</Text>
-                        <FlatList
-                            data={lastDatesApply}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item }) => {
-                                return (
-                                    <Pressable style={{ flexDirection: 'row', gap: 10 }}
-                                        onPress={() => NavigationService.navigate('JobDetails', { id: item.job_id, jobList: [...lastDatesApply] })}
-                                    >
-                                        <Image
-                                            source={Images.arrowNext}
-                                            style={{
-                                                height: 15,
-                                                width: 15,
-                                                marginTop: 5,
-                                                tintColor: colors.greyText
-                                            }}
-                                        />
-                                        <View style={{ flex: 1 }}>
-                                            <RenderHtml
-                                                contentWidth={screenWidth}
-                                                source={{ html: item.title }}
-                                                tagsStyles={{
-                                                    p: { ...TextStyles.textBase, marginTop: 0, lineHeight: 20, color: colors.greyText, textAlign: 'auto', fontFamily: FONTS.semibold },
-                                                    u: { color: colors.skyBlue, fontFamily: FONTS.regular },
-                                                }}
-                                                systemFonts={[...defaultSystemFonts, 'Poppins-SemiBold', 'Poppins-Regular']}
-                                            />
-                                        </View>
-                                    </Pressable>
+                                            <View style={{ flex: 1 }}>
+                                                <RenderHtml
+                                                    contentWidth={screenWidth}
+                                                    source={{ html: item.title }}
+                                                    tagsStyles={{
+                                                        p: { ...TextStyles.textBase, marginTop: 0, lineHeight: 20, color: colors.greyText, textAlign: 'auto', fontFamily: FONTS.semibold },
+                                                        u: { color: colors.skyBlue, fontFamily: FONTS.regular },
+                                                    }}
+                                                    systemFonts={[...defaultSystemFonts, 'Poppins-SemiBold', 'Poppins-Regular']}
+                                                />
+                                            </View>
+                                        </Pressable>}
+                                    </>
                                 )
                             }}
                             keyExtractor={(itm, index) => index.toString()}
                         />
+                        <TouchableOpacity
+                            style={{ alignSelf: 'center', marginTop: 10 }}
+                            onPress={() => {
+                                if (viewMoreInds.lastDateInd > 5) {
+                                    setViewMoreInds(pre => ({ ...pre, lastDateInd: 5 }));
+                                } else {
+                                    setViewMoreInds(pre => ({ ...pre, lastDateInd: lastDatesApply?.length - 1 }));
+                                }
+                            }}>
+                            {viewMoreInds.lastDateInd < 6 && ((lastDatesApply?.length) > 6) && <Text style={{ ...TextStyles.title3, textDecorationLine: 'underline', color: colors.text }}>
+                                View More</Text>}
+                            {viewMoreInds.lastDateInd > 5 && <Text style={{ ...TextStyles.title3, textDecorationLine: 'underline', color: colors.text }}>
+                                View Less</Text>}
+                        </TouchableOpacity>
                     </View>}
 
                     {!loading && jobs.length > 0 && <Pressable style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}

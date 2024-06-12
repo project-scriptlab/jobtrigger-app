@@ -10,13 +10,6 @@ import { Images } from '../Constants/Images';
 import UseApi from '../ApiConf';
 import { Colors } from '../Constants/Colors';
 
-const tableData = [
-    { name: 'Railway Recruitment Board - Siliguri', link: 'https://www.rrbsiliguri.gov.in/public-disclosure-of-non-recommended-willing-candidates.html' },
-    { name: 'Railway Recruitment Board - Siliguri', link: 'https://www.rrbsiliguri.gov.in/public-disclosure-of-non-recommended-willing-candidates.html' },
-    { name: 'Railway Recruitment Board - Siliguri', link: 'https://www.rrbsiliguri.gov.in/public-disclosure-of-non-recommended-willing-candidates.html' },
-    { name: 'Railway Recruitment Board - Siliguri', link: 'https://www.rrbsiliguri.gov.in/public-disclosure-of-non-recommended-willing-candidates.html' },
-]
-
 const Agencies = () => {
     const { colors } = useTheme();
     const { Request } = UseApi();

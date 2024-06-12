@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, useColorScheme, Alert, PermissionsAndroid, Link
 import SplashScreen from './App/Screen/Auth/SplashScreen';
 // import AuthStack from './App/Navigation/AuthStack';
 import NavigationService from './App/Services/Navigation';
-import AppStack from './App/Navigation/AppStack';
+// import AppStack from './App/Navigation/AppStack';
 // import { Theme } from 'react-native-basic-elements';
 // import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
@@ -26,7 +26,7 @@ const App = () => {
   // const colorScheme = useColorScheme();
   // const scheme = useColorScheme();
   const [showSplashScreen, setShowSplashScreen] = useState(true);
-  const { appSetting, userData } = useSelector(state => state.User);
+  const { appSetting, userData,currPageInd } = useSelector(state => state.User);
   const { Request } = UseApi();
   // const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch();
@@ -185,7 +185,8 @@ const App = () => {
           screens: {
             Home: '',
             Notification: 'notification',
-            JobDetails: ':slug',
+            JobDetails:currPageInd != 8? ':slug':'/details',
+            RelatedJobDetails:currPageInd != 8? '/related':':currSlug'
             // JobDetails: 'jobdetails/:id',
           }
         }
@@ -217,7 +218,6 @@ const App = () => {
           }}
         >
 
-         
           {showSplashScreen && <Stack.Screen name="SplashScreen" component={SplashScreen} />}
           {/* <Stack.Screen name="AppStack" component={AppStack} initialParams={{changeDarkMode}}/> */}
           <Stack.Screen name="DrawerNav" component={DrawerNav}/>
